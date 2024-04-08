@@ -1,5 +1,9 @@
 import socket
-from tkinter import*
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+import sys
+import time
 
 UDP_IP = "127.0.0.1"
 UDP_PORT = 5005
@@ -18,22 +22,24 @@ def getData():
 #    data, addr = getData()
 #    print("received message: %s" % data)
 
-root = Tk()
-root.title("Tk Example")
-root.minsize(200, 200)  # width, height
-root.geometry("300x300+50+50")
 
-lab = Label(root, text="text")
-lab.pack()
+class MainWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Hi")
+        self.TextBox = QLabel("pineapple")
+        self.setCentralWidget(self.TextBox)
 
-
-def update():
-    lab['text'] = getData()
-    root.after(1000, update) # run itself again after 1000 ms
-
-update()
-root.mainloop()
-
-
+        self.timer = QTimer()
+        self.timer.setInterval(1000)
+        self.timer.timeout.connect(self.UpdateTimer)
+        self.timer.start()
+    
+    def UpdateTimer(self):
+        self.TextBox.setText(getData())
 
 
+app = QApplication(sys.argv)
+window = MainWindow()
+window.show()
+app.exec()
